@@ -1,12 +1,11 @@
-//import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View, TextInput, FlatList, ActivityIndicator } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View, TextInput, FlatList, ActivityIndicator } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import NoteItem from './components/NoteItem';
-import {app, db, getFirestore, collection, addDoc, getDocs} from './firebase/firebase_config'
-//import { async } from '@firebase/util';
-//import * as ImagePicker from 'expo-image-picker';
+import {db, collection, addDoc, getDocs} from './firebase/firebase_config'
+import { storage } from './firebase/firebase_config';
+
 
 export default function App() {
 const [title, setTitle] = useState("");
@@ -54,24 +53,31 @@ useEffect(() => {
       {noteList.length > 0 ? (
         <FlatList 
         data={noteList}
-        renderItem={({item}) => <NoteItem title={item.title} />}
+        renderItem={({item}) => 
+          <NoteItem title={item.title} id={item.id} />
+        }
         keyExtractor={item =>item.id}
         /> 
       ):(
         <ActivityIndicator />
       )}
            
-      
       {/* this is the input note field */}
       <TextInput 
-      placeholder='Enter Your Note' 
-      style={styles.input}
-      value={title}
-      onChangeText={(text)=> setTitle(text)}
-      onSubmitEditing={addNoteItem}
+        placeholder='Enter Your Note' 
+        style={styles.input}
+        value={title}
+        onChangeText={(text)=> setTitle(text)}
+        onSubmitEditing={addNoteItem}
       >
 
       </TextInput>
+      
+      <Image 
+        source={
+          {uri: 'https://firebasestorage.googleapis.com/v0/b/mynotebookwithfirebase.appspot.com/o/JcYL3x6XR24qUMUh1w7d.jpg?alt=media&token=eb27fbca-e62d-4ff9-98d2-d9372e42aec9'}
+        }
+      />
     </View>
   );
 }
